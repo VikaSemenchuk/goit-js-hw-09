@@ -25,9 +25,19 @@ const options = {
     defaultDate: new Date(),
     minuteIncrement: 1,
     onClose(selectedDates) {
+      console.log(selectedDates[0].getTime());
+      const usersDate = selectedDates[0].getTime();
+console.log(usersDate);
+
+
       console.log(typeof selectedDates[0])
-      console.log(selectedDates[0])
-  
+const test = selectedDates[0];
+const currentDate = Date.now();
+console.log(currentDate);
+
+const differ = currentDate - test;
+console.log(differ)
+
       // !РОБИТИ ДАЛІ ДЕСЬ ТУТ! ПЕРЕВІРЬ КОНСОЛЬ далі все по живому уроку
       // тут зберігається дата від користувача, далі її перетворюємо, порівнюємо і т д!!!!!!!!!!!
     },
