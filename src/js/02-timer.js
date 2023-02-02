@@ -1,73 +1,78 @@
-/**
- 1. div.timer: display: flex       done
- 2. libery flatpickr:
-    - 
- . libery notiflix        done
-
- */
-//  const selector = {
-//     altInput: true,
-//   dateFormat: "YYYY-MM-DD",
-//   altFormat: "DD-MM-YYYY",
-//   allowInput: true,
-//   parseDate: (datestr, format) => {
-//     return moment(datestr, format, true).toDate();
-//   },
-//   formatDate: (date, format, locale) => {
-//     // locale can also be used
-//     return moment(date).format(format);
-//   }
-// }
-
-const options = {
-    enableTime: true,
-    time_24hr: true,
-    defaultDate: new Date(),
-    minuteIncrement: 1,
-    onClose(selectedDates) {
-      console.log(selectedDates[0].getTime());
-      const usersDate = selectedDates[0].getTime();
-console.log(usersDate);
-
-
-      console.log(typeof selectedDates[0])
-const test = selectedDates[0];
-const currentDate = Date.now();
-console.log(currentDate);
-
-const differ = currentDate - test;
-console.log(differ)
-
-      // !РОБИТИ ДАЛІ ДЕСЬ ТУТ! ПЕРЕВІРЬ КОНСОЛЬ далі все по живому уроку
-      // тут зберігається дата від користувача, далі її перетворюємо, порівнюємо і т д!!!!!!!!!!!
-    },
-  }
-
-console.log(options.onClose);
-
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import { Report } from 'notiflix/build/notiflix-report-aio';
+
+const customerInputEl = document.getElementById('datetime-picker');
+
+const startBtnEl = document.querySelector('button[data-start]');
 
 const containerEl = document.querySelector('.timer');
 const fieldsEl = document.querySelectorAll('.field');
 const dateValuesEl = document.querySelectorAll('.value');
 const dateLabelEl = document.querySelectorAll('.label');
 
-const customerInputEl = document.getElementById('datetime-picker');
-const fp = flatpickr('#datetime-picker', options);
+const dayEl = document.querySelector('span[data-days]');
+const hourEl = document.querySelector('span[data-hours]');
+const minEl = document.querySelector('span[data-minutes]');
+const secEl = document.querySelector('span[data-seconds]');
 
-console.log(fp);
-console.log(flatpickr);
+startBtnEl.disabled = true;
+let ms = null;
+let selectedDate = null;
+let intervalId = null;
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    selectedDate = selectedDates[0];
+    ms = selectedDate < options.defaultDate;
 
-// console.log(customerInputEl.addEventListener('input', onCustomerInput()));
-// console.log(customerInputEl);
+    if (ms) {
+      Report.warning('Please choose a date in the future');
+    } else startBtnEl.disabled = false;
+    return;
+  },
+};
 
-// customerInputEl.addEventListener('input', onCustomerInput());
+flatpickr(customerInputEl, options);
 
-// function onCustomerInput() {
-//   console.log('hi');
-// }
+console.log(selectedDate);
+
+startBtnEl.addEventListener('click', startTimer);
+
+function convertMs(ms) {
+ms = selectedDate - Date.now();
+  // Number of milliseconds per unit of time!!!!сюди дописати  Date.now????
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
+
+  // Remaining days
+  dayEl.textContent = Math.floor(ms / day);
+  // Remaining hours
+  hourEl.textContent = Math.floor((ms % day) / hour);
+  // Remaining minutes
+  minEl.textContent = Math.floor(((ms % day) % hour) / minute);
+  // Remaining seconds
+  secEl.textContent = Math.floor((((ms % day) % hour) % minute) / second);
+  // startBtnEl.textContent = `${days} d. ${hours} h. ${minutes} m. ${seconds} s.`;
+  // console.log(days, hours, minutes, seconds);
+
+  // dayEl.textContent = days;
+  // hourEl.textContent = hours;
+  // minEl.textContent = minutes;
+  // secEl.textContent = seconds;
+}
+
+function startTimer() {
+  convertMs();
+  intervalId = setInterval(convertMs, 1000);
+  console.log('work');
+  console.log(intervalId);
+}
 
 containerEl.style.display = 'flex';
 containerEl.style.gap = '14px';
@@ -91,4 +96,9 @@ for (const label of dateLabelEl) {
   label.style.fontFamily = 'sans-serif';
 }
 
-// Report.warning('Please choose a date in the future');
+// let calendar = flatpickr(customerInputEl, options);
+// customerInputEl.addEventListener('input', calendar);
+
+// console.log(calendar.selectedDates[0]);
+
+// console.log(calendar.selectedDates[0]);
