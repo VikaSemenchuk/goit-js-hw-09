@@ -17,7 +17,7 @@ const minEl = document.querySelector('span[data-minutes]');
 const secEl = document.querySelector('span[data-seconds]');
 
 startBtnEl.disabled = true;
-let ms = null;
+// let ms = null;
 let selectedDate = null;
 let intervalId = null;
 const options = {
@@ -44,22 +44,20 @@ startBtnEl.addEventListener('click', startTimer);
 
 function convertMs(ms) {
 ms = selectedDate - Date.now();
-  // Number of milliseconds per unit of time!!!!сюди дописати  Date.now????
+  // Number of milliseconds per unit of time
   const second = 1000;
   const minute = second * 60;
   const hour = minute * 60;
   const day = hour * 24;
 
   // Remaining days
-  dayEl.textContent = Math.floor(ms / day);
+  dayEl.textContent = addZero(Math.floor(ms / day));
   // Remaining hours
-  hourEl.textContent = Math.floor((ms % day) / hour);
+  hourEl.textContent = addZero(Math.floor((ms % day) / hour));
   // Remaining minutes
-  minEl.textContent = Math.floor(((ms % day) % hour) / minute);
+  minEl.textContent = addZero(Math.floor(((ms % day) % hour) / minute));
   // Remaining seconds
-  secEl.textContent = Math.floor((((ms % day) % hour) % minute) / second);
-  // startBtnEl.textContent = `${days} d. ${hours} h. ${minutes} m. ${seconds} s.`;
-  // console.log(days, hours, minutes, seconds);
+  secEl.textContent = addZero(Math.floor((((ms % day) % hour) % minute) / second));
 
   // dayEl.textContent = days;
   // hourEl.textContent = hours;
@@ -72,6 +70,13 @@ function startTimer() {
   intervalId = setInterval(convertMs, 1000);
   console.log('work');
   console.log(intervalId);
+startBtnEl.disabled = true;
+
+
+}
+
+function addZero (number) {
+  return String(number).padStart(2, 0);
 }
 
 containerEl.style.display = 'flex';
@@ -80,7 +85,6 @@ containerEl.style.marginTop = '14px';
 containerEl.style.heigth = '14px';
 
 for (const field of fieldsEl) {
-  //   console.log(field);
   field.style.display = 'grid';
   field.style.justifyItems = 'center';
 }
@@ -96,9 +100,3 @@ for (const label of dateLabelEl) {
   label.style.fontFamily = 'sans-serif';
 }
 
-// let calendar = flatpickr(customerInputEl, options);
-// customerInputEl.addEventListener('input', calendar);
-
-// console.log(calendar.selectedDates[0]);
-
-// console.log(calendar.selectedDates[0]);
