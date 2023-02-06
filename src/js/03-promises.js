@@ -26,6 +26,7 @@ function submitForm(event) {
         Notify.failure(`Rejected promise ${position} in ${delay}ms`);
       });
   }
+  // event.target.reset();
 }
 
 function createPromise(position, delay) {

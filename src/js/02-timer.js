@@ -69,13 +69,10 @@ function convertMs(ms) {
 }
 
 function startTimer() {
-  // convertMs();
-  customerInputEl.disabled = true;
-
+  
   intervalId = setInterval(convertMs, 1000);
-  console.log('work');
-  console.log(intervalId);
 
+  customerInputEl.disabled = true;
   startBtnEl.disabled = true;
 }
 
