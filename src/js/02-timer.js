@@ -13,6 +13,8 @@ const minEl = document.querySelector('span[data-minutes]');
 const secEl = document.querySelector('span[data-seconds]');
 
 startBtnEl.disabled = true;
+
+let ms = null;
 let selectedDate = null;
 let intervalId = null;
 const options = {
